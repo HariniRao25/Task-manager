@@ -8,13 +8,12 @@ if (!process.env.JWT_SECRET) {
   console.warn('JWT_SECRET is not set; using a local development fallback secret.');
 }
 
-connectDB()
-  .then(() => {
-    app.listen(PORT, '0.0.0.0',() => {
-      console.log(`Server running on port ${PORT}`);
-    });
-  })
-  .catch((err) => {
-    console.error('Failed to connect to DB', err);
-    process.exit(1);
+(async () => {
+  const dbConnected = await connectDB();
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running on port ${PORT}`);
+    if (!dbConnected) {
+      console.warn('Server started without MongoDB connection (API requests may fail).');
+    }
   });
+})();

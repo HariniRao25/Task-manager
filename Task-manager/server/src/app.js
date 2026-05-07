@@ -14,6 +14,13 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan ? morgan('dev') : (req,res,next)=>next());
 
+app.get('/', (req, res) => {
+  res.json({
+    message: 'Task Manager API is running',
+    status: 'ok',
+  });
+});
+
 app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/tasks', taskRoutes);
