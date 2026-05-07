@@ -10,6 +10,13 @@ if (!process.env.JWT_SECRET) {
 
 (async () => {
   const dbConnected = await connectDB();
+  const isProduction = process.env.NODE_ENV === 'production';
+
+  if (!dbConnected && isProduction) {
+    console.error('MongoDB is required in production. Exiting process.');
+    process.exit(1);
+  }
+
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server running on port ${PORT}`);
     if (!dbConnected) {
